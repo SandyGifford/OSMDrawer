@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noImplicitReturns": true,
+		"alwaysStrict": true,
+		"removeComments": true,
+		"outDir": "public/build",
+		"declaration": true,
+		"sourceMap": true,
+	},
+	"include": ["src"]
+}
