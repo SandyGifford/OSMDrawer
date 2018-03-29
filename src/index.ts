@@ -185,12 +185,13 @@ function drawOsmQuery(query: string): void {
 }
 
 function drawQueryFromInput(): void {
-	drawOsmQuery(queryInput.textContent);
+	console.log(queryInput.value);
+	drawOsmQuery(queryInput.value);
 }
 
-const queryInput = document.querySelector(".App__input__query");
+const queryInput: HTMLTextAreaElement = document.querySelector(".App__input__query");
 const submitButton = document.querySelector(".App__input__submit");
-queryInput.textContent = `(
+queryInput.value = `(
 	node(51.249,7.148,51.251,7.152);
 	<;
 );
