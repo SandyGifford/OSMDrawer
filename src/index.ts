@@ -142,6 +142,7 @@ const cvs: HTMLCanvasElement = document.querySelector("#mapCanvas");
 const ctx = cvs.getContext("2d");
 
 function drawOsm(osmJson: OsmQueryResponseJson): void {
+	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
 	const rect: LatLonRect = {
 		lat: {
