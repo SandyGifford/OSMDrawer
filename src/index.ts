@@ -167,11 +167,11 @@ function drawOsm(osmJson: OsmQueryResponseJson): void {
 	rect.lon.range = rect.lon.max - rect.lon.min;
 
 	osmJson.nodes.forEach(node => {
-		ctx.fillStyle = colorHash(node.id);
+		ctx.fillStyle = colorHash(node.uid);
 
 		ctx.fillRect(
-			cvs.width * (node.lat - rect.lat.min) / rect.lat.range - 5,
-			cvs.height * (node.lon - rect.lon.min) / rect.lon.range - 5,
+			cvs.width * (node.lon - rect.lon.min) / rect.lon.range - 5,
+			cvs.height * (node.lat - rect.lat.min) / rect.lat.range - 5,
 			10,
 			10
 		);
