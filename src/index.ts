@@ -110,7 +110,7 @@ function parseOsmWay(way: Element): OsmWay {
 
 function parseOsmQueryResponse(response: XMLDocument): OsmQueryResponseJson {
 	const root = response.querySelector("osm");
-
+	
 	return {
 		version: root.getAttribute("version"),
 		generator: root.getAttribute("generator"),
@@ -179,18 +179,23 @@ function drawOsm(osmJson: OsmQueryResponseJson): void {
 	});
 }
 
-function drawOsmQuery(query: string): void {
-	jsonOsmQuery(query)
-		.then(json => drawOsm(json));
+function drawOsmQuery(query: string): Promise<void> {
+	return jsonOsmQuery(query)
+		.then(json => {
+			drawOsm(json)
+		});
 }
+
+const submitButton = document.querySelector(".App__input__submit");
+const queryInput: HTMLTextAreaElement = document.querySelector(".App__input__query");
 
 function drawQueryFromInput(): void {
-	console.log(queryInput.value);
-	drawOsmQuery(queryInput.value);
+	submitButton.className = "App__input__submit App__input__submit--disabled";
+	drawOsmQuery(queryInput.value)
+		.then(() => submitButton.className = "App__input__submit")
+		.catch(() => submitButton.className = "App__input__submit");
 }
 
-const queryInput: HTMLTextAreaElement = document.querySelector(".App__input__query");
-const submitButton = document.querySelector(".App__input__submit");
 queryInput.value = `(
 	node(51.249,7.148,51.251,7.152);
 	<;
