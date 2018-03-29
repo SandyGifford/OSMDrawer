@@ -1,13 +1,72 @@
 <html>
 	<head>
 		<style>
-			#mapCanvas {
-				border: 1px solid black;
+			.App {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				display: flex;
+				width: 100%;
+				max-width: 720px;
+				min-width: 300px;
+				font-family: sans-serif;
+				font-size: 15px;
+			}
+
+			.App__map {
+				position: relative;
+				border: 1px solid #666;
+				flex: 1 1 50%;
+				height: 0;
+				padding-bottom: 50%;
+			}
+
+			.App__map__canvas {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+			}
+
+			.App__input {
+				flex: 1 1 50%;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.App__input__query {
+				resize: none;
+				flex: 1 1 auto;
+				background: #EEE;
+				border: none;
+				outline: none;
+				padding: 10px;
+				font-family: monospace;
+			}
+
+			.App__input__submit {
+				font-weight: bold;
+				flex: 0 0 50px;
+				background: #333;
+				color: white;
+				text-align: center;
+				line-height: 3;
+				cursor: pointer;
 			}
 		</style>
 	</head>
 	<body>
-		<canvas width="500" height="500" id="mapCanvas"></canvas>
+		<div class="App">
+		<div class="App__map">
+			<canvas width="500" height="500" class="App__map__canvas"></canvas>
+		</div>
+		<div class="App__input">
+			<textarea class="App__input__query"></textarea>
+			<div class="App__input__submit">query</div>
+		</div>
+		</div>
 		<script src="./build/index.js"></script>
 	</body>
 </html>

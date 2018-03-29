@@ -138,7 +138,7 @@ function jsonOsmQuery(query: string): Promise<OsmQueryResponseJson> {
 }
 
 
-const cvs: HTMLCanvasElement = document.querySelector("#mapCanvas");
+const cvs: HTMLCanvasElement = document.querySelector(".App__map__canvas");
 const ctx = cvs.getContext("2d");
 
 function drawOsm(osmJson: OsmQueryResponseJson): void {
@@ -184,10 +184,18 @@ function drawOsmQuery(query: string): void {
 		.then(json => drawOsm(json));
 }
 
-drawOsmQuery(`
-	(
-		node(51.249,7.148,51.251,7.152);
-		<;
-	);
-	out meta;
-`);
+function drawQueryFromInput(): void {
+	drawOsmQuery(queryInput.textContent);
+}
+
+const queryInput = document.querySelector(".App__input__query");
+const submitButton = document.querySelector(".App__input__submit");
+queryInput.textContent = `(
+	node(51.249,7.148,51.251,7.152);
+	<;
+);
+out meta;`;
+
+submitButton.addEventListener("click", drawQueryFromInput);
+
+drawQueryFromInput();
