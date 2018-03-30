@@ -64,13 +64,17 @@ export default class App extends React.Component<AppProps, AppState> {
 		});
 
 		OsmUtils.jsonOsmQuery(this.state.query)
-			.then(osmData => this.setState({
-				osmData: osmData,
-				fetching: false,
-			}))
-			.catch(() => this.setState({
-				fetching: false,
-			}));
+			.then(osmData => {
+				this.setState({
+					osmData: osmData,
+					fetching: false,
+				})
+			})
+			.catch(() => {
+				this.setState({
+					fetching: false,
+				})
+			});
 	};
 
 	private queryChanged = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {

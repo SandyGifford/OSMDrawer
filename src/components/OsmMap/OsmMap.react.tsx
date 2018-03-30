@@ -38,18 +38,21 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 
 		const {nodes, ways} = osmData;
 
+		
 		this.clearCanvas();
-
+		
 		const rect = PositionConversionUtils.getLatLonRect(nodes);
-
+		
 		ways.forEach(way => {
 			if (way.nds.length) {
 				this.ctx.strokeStyle = "black";
 				this.ctx.beginPath();
+				
+				const firstId = way.nds.find(nd => !!nodes[nd.ref]).ref;
+				const firstNode = nodes[firstId];
 
-				// const firstNode = osmJson.nodes[way.nds[0].ref];
-				// const p = latLonToPx(firstNode.lat, firstNode.lon);
-				// this.ctx.moveTo(p.x, p.y);
+				const p = PositionConversionUtils.nodeToPx(firstNode, rect, this.cvs.width, this.cvs.height);
+				this.ctx.moveTo(p.x, p.y);
 
 				way.nds.forEach(nd => {
 					const node = nodes[nd.ref];
