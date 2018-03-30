@@ -7,6 +7,8 @@ import PositionConversionUtils from "../../utils/PositionConversionUtils";
 
 export interface OsmMapProps {
 	osmData: OsmData;
+	width: number;
+	height: number;
 }
 export interface OsmMapState { }
 
@@ -26,6 +28,8 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 	public render(): React.ReactNode {
 		return (
 			<canvas
+				width={this.props.width}
+				height={this.props.height}
 				className="OsmMap"
 				ref={this.setRef} />
 		);
@@ -45,14 +49,6 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 		
 		ways.forEach(way => {
 			if (way.nds.length) {
-				// this.ctx.strokeStyle = "black";
-				
-				// const firstId = way.nds.find(nd => !!nodes[nd.ref]).ref;
-				// const firstNode = nodes[firstId];
-				
-				// const p = PositionConversionUtils.nodeToPx(firstNode, rect, this.cvs.width, this.cvs.height);
-				// this.ctx.moveTo(p.x, p.y);
-				
 				this.ctx.beginPath();
 
 				way.nds.forEach(nd => {

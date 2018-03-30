@@ -7,7 +7,9 @@ import OsmData from "../../interfaces/OSM";
 import OsmUtils from "../../utils/OsmUtils";
 import DomUtils from "../../utils/DomUtils";
 
-export interface AppProps { }
+export interface AppProps {
+	mapResolution: number;
+}
 export interface AppState {
 	osmData: OsmData;
 	query: string;
@@ -44,7 +46,10 @@ export default class App extends React.Component<AppProps, AppState> {
 		return (
 			<div className="App">
 				<div className="App__map">
-					<OsmMap osmData={this.state.osmData} />
+					<OsmMap
+						osmData={this.state.osmData}
+						width={this.props.mapResolution}
+						height={this.props.mapResolution} />
 				</div>
 				<div className="App__form">
 					<textarea
