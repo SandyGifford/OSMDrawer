@@ -15,6 +15,7 @@ app.get("/*", (req, res) => {
 });
 
 app.post("/data", (req, res) => {
+	console.log(`processing query\n${req.body}`)
 	fetch("https://lz4.overpass-api.de/api/interpreter", {
 		body: req.body,
 		method: "post",

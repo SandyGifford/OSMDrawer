@@ -4,6 +4,7 @@ import OsmData from "../../interfaces/OSM";
 import "./OsmMap";
 
 import PositionConversionUtils from "../../utils/PositionConversionUtils";
+// import HashUtils from "../../utils/HashUtils";
 
 export interface OsmMapProps {
 	osmData: OsmData;
@@ -40,28 +41,32 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 
 		if (!osmData) return;
 
-		const {nodes, ways} = osmData;
+		const {nodes, layers} = osmData;
 
 		
 		this.clearCanvas();
 		
 		const rect = PositionConversionUtils.getLatLonRect(nodes);
 		
-		ways.forEach(way => {
-			if (way.nds.length) {
-				this.ctx.beginPath();
+		Object.keys(layers).forEach(tagKey => {
+			const layer = layers[tagKey];
+			
+			layer.forEach(way => {
+				if (way.nds.length) {
+					this.ctx.beginPath();
 
-				way.nds.forEach(nd => {
-					const node = nodes[nd.ref];
+					way.nds.forEach(nd => {
+						const node = nodes[nd.ref];
 
-					if (node) {
-						const p = PositionConversionUtils.nodeToPx(node, rect, this.cvs.width, this.cvs.height);
-						this.ctx.lineTo(p.x, p.y);
-					}
-				});
-				this.ctx.closePath();
-				this.ctx.stroke();
-			}
+						if (node) {
+							const p = PositionConversionUtils.nodeToPx(node, rect, this.cvs.width, this.cvs.height);
+							this.ctx.lineTo(p.x, p.y);
+						}
+					});
+					this.ctx.closePath();
+					this.ctx.stroke();
+				}
+			})
 		});
 	}
 
