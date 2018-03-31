@@ -4,6 +4,7 @@ import OsmData from "../../interfaces/OSM";
 import "./OsmMap";
 
 import PositionConversionUtils from "../../utils/PositionConversionUtils";
+import HashUtils from "../../utils/HashUtils";
 // import HashUtils from "../../utils/HashUtils";
 
 export interface OsmMapProps {
@@ -13,9 +14,29 @@ export interface OsmMapProps {
 }
 export interface OsmMapState { }
 
+interface LayerStyle {
+	tag: string;
+	color?: string;
+	fill: boolean;
+	lineWeight: number;
+}
+
 export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 	private cvs: HTMLCanvasElement;
 	private ctx: CanvasRenderingContext2D;
+
+	private static layerStyles: LayerStyle[] = [
+		{
+			tag: "highway",
+			fill: false,
+			lineWeight: 4,
+		},
+		{
+			tag: "building",
+			fill: true,
+			lineWeight: 1,
+		}
+	];
 
 	public componentDidMount(): void {
 		this.ctx = this.cvs.getContext("2d");
@@ -48,8 +69,16 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 		
 		const rect = PositionConversionUtils.getLatLonRect(nodes);
 		
-		Object.keys(layers).forEach(tagKey => {
-			const layer = layers[tagKey];
+		OsmMap.layerStyles.forEach(style => {
+			style.color = HashUtils.colorHash(style.tag);
+			const layer = layers[style.tag];
+			
+			if (!layer) return;
+
+			this.ctx.strokeStyle = style.color;
+			this.ctx.fillStyle = style.color;
+			this.ctx.lineWidth = style.lineWeight;
+			// console.log(tagKey, HashUtils.colorHash(tagKey));
 			
 			layer.forEach(way => {
 				if (way.nds.length) {
@@ -63,8 +92,10 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 							this.ctx.lineTo(p.x, p.y);
 						}
 					});
-					this.ctx.closePath();
+					
+					// this.ctx.closePath();
 					this.ctx.stroke();
+					if (style.fill) this.ctx.fill();
 				}
 			})
 		});
