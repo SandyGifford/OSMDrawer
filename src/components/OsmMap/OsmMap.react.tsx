@@ -1,5 +1,5 @@
 import * as React from "react";
-import OsmData from "../../interfaces/OSM";
+import OsmData, { OsmWay } from "../../interfaces/OSM";
 
 import "./OsmMap";
 
@@ -19,6 +19,10 @@ interface LayerStyle {
 	color?: string;
 	fill: boolean;
 	lineWeight: number;
+	glow?: {
+		size: number;
+		color: string;
+	};
 }
 
 export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
@@ -29,10 +33,21 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 		{
 			tag: "highway",
 			fill: false,
-			lineWeight: 4,
+			lineWeight: 10,
+			color: "#99999F",
+			glow: {
+				size: 30,
+				color: "#fdec77"
+			}
 		},
 		{
 			tag: "building",
+			fill: true,
+			lineWeight: 1,
+			color: "#f0abfd",
+		},
+		{
+			tag: "park",
 			fill: true,
 			lineWeight: 1,
 		}
@@ -40,6 +55,8 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 
 	public componentDidMount(): void {
 		this.ctx = this.cvs.getContext("2d");
+		this.ctx.shadowOffsetX = 0;
+		this.ctx.shadowOffsetY = 0;
 		this.drawMap();
 	}
 
@@ -70,17 +87,12 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 		const rect = PositionConversionUtils.getLatLonRect(nodes);
 		
 		OsmMap.layerStyles.forEach(style => {
-			style.color = HashUtils.colorHash(style.tag);
+			if (!style.color) style.color = HashUtils.colorHash(style.tag);
 			const layer = layers[style.tag];
 			
 			if (!layer) return;
 
-			this.ctx.strokeStyle = style.color;
-			this.ctx.fillStyle = style.color;
-			this.ctx.lineWidth = style.lineWeight;
-			// console.log(tagKey, HashUtils.colorHash(tagKey));
-			
-			layer.forEach(way => {
+			const drawWay = (way: OsmWay) => {
 				if (way.nds.length) {
 					this.ctx.beginPath();
 
@@ -92,12 +104,30 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 							this.ctx.lineTo(p.x, p.y);
 						}
 					});
-					
-					// this.ctx.closePath();
+
 					this.ctx.stroke();
 					if (style.fill) this.ctx.fill();
 				}
-			})
+			}
+
+			this.ctx.lineWidth = style.lineWeight;
+
+			if (style.glow) {
+				this.ctx.shadowBlur = style.glow.size;
+				this.ctx.shadowColor = style.glow.color;
+				this.ctx.fillStyle = "";
+				this.ctx.strokeStyle = "";
+
+				layer.forEach(drawWay);
+			}
+
+			this.ctx.shadowBlur = 0;
+			this.ctx.shadowColor = "";
+
+			this.ctx.strokeStyle = style.color;
+			this.ctx.fillStyle = style.color;
+			
+			layer.forEach(drawWay);
 		});
 	}
 
