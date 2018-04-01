@@ -1,9 +1,12 @@
-export type OsmLayer = { [tagKey: string]: OsmWay[] }
+export type OsmLayer = { [tagKey: string]: string[] };
+export type OsmWays = { [id: string]: OsmWay };
+export type OsmNodes = { [id: string]: OsmNode };
 
 export default interface OsmData {
 	version: string;
 	generator: string;
-	nodes: { [id: string]: OsmNode };
+	nodes: OsmNodes;
+	ways: OsmWays;
 	layers: OsmLayer;
 }
 

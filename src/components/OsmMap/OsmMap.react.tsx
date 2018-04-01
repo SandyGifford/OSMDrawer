@@ -80,7 +80,7 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 
 		if (!osmData) return;
 
-		const {nodes, layers} = osmData;
+		const {nodes, ways, layers} = osmData;
 
 		
 		this.clearCanvas();
@@ -119,7 +119,7 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 				this.ctx.fillStyle = "";
 				this.ctx.strokeStyle = "";
 
-				layer.forEach(drawWay);
+				layer.forEach(layerId => drawWay(ways[layerId]));
 			}
 
 			this.ctx.shadowBlur = 0;
@@ -128,7 +128,7 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 			this.ctx.strokeStyle = style.color;
 			this.ctx.fillStyle = style.color;
 			
-			layer.forEach(drawWay);
+			layer.forEach(layerId => drawWay(ways[layerId]));
 		});
 	}
 

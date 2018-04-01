@@ -1,5 +1,5 @@
 import FetchUtils from "./FetchUtils";
-import OsmData, { OsmNode, OsmTag, OsmNd, OsmWay, OsmLayer } from "../interfaces/OSM";
+import OsmData, { OsmNode, OsmTag, OsmNd, OsmWays, OsmLayer, OsmNodes, OsmWay } from "../interfaces/OSM";
 
 export default class OsmUtils {
 	public static osmQuery(query: string): Promise<XMLDocument> {
@@ -20,16 +20,20 @@ export default class OsmUtils {
 		return {
 			version: root.getAttribute("version"),
 			generator: root.getAttribute("generator"),
+			ways: Array.from(root.querySelectorAll("way")).reduce((col, way) => {
+				col[way.getAttribute("id")] = OsmUtils.parseOsmWay(way);
+				return col;
+			}, { } as OsmWays ),
 			nodes: Array.from(root.querySelectorAll("node")).reduce((col, node) => {
 				col[node.getAttribute("id")] = OsmUtils.parseOsmNode(node);
 				return col;
-			}, {} as {[id: string]: OsmNode}),
+			}, {} as OsmNodes ),
 			layers: Array.from(root.querySelectorAll("way")).reduce((layers, wayElement) => {
 				const way = OsmUtils.parseOsmWay(wayElement);
 
 				way.tags.forEach(tag => {
 					if (!layers[tag.k]) layers[tag.k] = [];
-					layers[tag.k].push(way);
+					layers[tag.k].push(way.id);
 				});
 
 				return layers;
