@@ -32,8 +32,8 @@ export default class PositionConversionUtils {
 
 	public static nodeToPx(node: OsmNode, rect: LatLonRect, cvsW: number, cvsH: number): { x: number, y: number } {
 		return {
-			x: this.latLonToPx(node.lat, rect.lat, cvsW),
-			y: this.latLonToPx(node.lon, rect.lon, cvsH)
+			x: this.latLonToPx(node.lon, rect.lon, cvsW),
+			y: cvsH - this.latLonToPx(node.lat, rect.lat, cvsH),
 		}
 	}
 
