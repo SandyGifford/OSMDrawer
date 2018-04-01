@@ -5,7 +5,6 @@ import "./OsmMap";
 
 import PositionConversionUtils from "../../utils/PositionConversionUtils";
 import HashUtils from "../../utils/HashUtils";
-// import HashUtils from "../../utils/HashUtils";
 
 export interface OsmMapProps {
 	osmData: OsmData;
@@ -66,11 +65,13 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 
 	public render(): React.ReactNode {
 		return (
-			<canvas
-				width={this.props.width}
-				height={this.props.height}
-				className="OsmMap"
-				ref={this.setRef} />
+			<div className="OsmMap">
+				<canvas
+					width={this.props.width}
+					height={this.props.height}
+					className="OsmMap__map"
+					ref={this.setRef} />
+			</div>
 		);
 	}
 
@@ -132,7 +133,8 @@ export default class OsmMap extends React.Component<OsmMapProps, OsmMapState> {
 	}
 
 	private clearCanvas(): void {
-		this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
+		this.ctx.fillStyle = "#97eca9";
+		this.ctx.fillRect(0, 0, this.cvs.width, this.cvs.height);
 	}
 
 	private setRef = (ref: HTMLCanvasElement): void => {

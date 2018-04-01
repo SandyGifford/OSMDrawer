@@ -1,9 +1,32 @@
 .OsmMap {
+	$skyColor: #bbf9ff;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 
-	background: #97eca9;
+	background: $skyColor;
+	overflow: hidden;
+
+	&::after {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 20%;
+		background: linear-gradient(0deg, rgba($skyColor, 0), $skyColor);
+		top: 30%;
+	}
+
+	&__map {
+		$size: 200%;
+
+		position: absolute;
+		top: -$size / 4;
+		left: -$size / 4;
+		width: $size;
+		height: $size;
+
+		transform: perspective(600px) rotateX(75deg);
+	}
 }
