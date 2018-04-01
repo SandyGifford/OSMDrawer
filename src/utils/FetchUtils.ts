@@ -4,4 +4,9 @@ export default class FetchUtils {
 			.then(response => response.text())
 			.then(text => new DOMParser().parseFromString(text, "text/xml"));
 	}
+
+	public static printAndPass<T>(input: T): T {
+		console.log(input);
+		return input;
+	}
 }
